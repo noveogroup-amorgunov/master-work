@@ -81,23 +81,25 @@ const AddTaskPage = withRouter(
       };
       console.log(data);
       const service = new TaskService();
-      service.add(data).then((response) => {
-        // this.setState({ data, loading: false });
-        console.log(response);
-        if (response.message) {
-          const { location } = this.props;
+      const inputData = {};
+      service.uploadInputData(inputData).then((inputFile) => {
+        service.add(Object.assign({}, data, { inputFile })).then((response) => {
+          // this.setState({ data, loading: false });
+          console.log(response);
+          if (response.message) {
+            const { location } = this.props;
 
-          if (location.state && location.state.nextPathname) {
-            this.props.router.replace(location.state.nextPathname);
+            if (location.state && location.state.nextPathname) {
+              this.props.router.replace(location.state.nextPathname);
+            } else {
+              // this.props.router.replace(`/tasks/${response.task._id}`);
+              this.props.router.replace('/dashboard');
+            }
           } else {
-            // this.props.router.replace(`/tasks/${response.task._id}`);
-            this.props.router.replace('/dashboard');
+            console.error(response);
           }
-        } else {
-          console.error(response);
-        }
-      }).catch(console.error);
-
+        }).catch(console.error);
+      });
 
       // $.ajax({
       //   type: 'POST',
@@ -227,7 +229,10 @@ const AddTaskPage = withRouter(
                   <option value="5908119b654e3f0e2e6de414">{t('Permutation test')}</option>
                 </select><br />
 
+                {t('Input data')}: <input ref="input" name="input" type="file" required="required" /><br />
+
                 {t('Config file')}: <textarea style={{ height: '100px' }} ref="config" name="config" required="required" /><br />
+                
 
                 <br />
                 <button className="btn btn-block btn-social btn-github" type="submit">{t('Add task')}</button>

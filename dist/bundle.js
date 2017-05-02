@@ -25245,6 +25245,7 @@ module.exports = {
 	"User haven't tasks yet": "У вас пока нет задач",
 	"Old password is wrong": "Введен неверный старый пароль",
 	"Home page": "Главная страница",
+	"Input data": "Входные данные",
 	"Tasks": "Список с задачами"
 };
 
@@ -25864,8 +25865,8 @@ var TaskListSmallItem = function (_React$Component) {
         { className: 'row task-container' },
         _react2.default.createElement('div', { className: 'task-status task-status-' + (status || 'new') }),
         _react2.default.createElement(
-          _reactRouter.Link,
-          { target: '_blank', to: file, className: '' },
+          'a',
+          { target: '_blank', href: file, className: '' },
           name
         ),
         _react2.default.createElement(
@@ -26080,23 +26081,26 @@ var AddTaskPage = (0, _reactRouter.withRouter)(_react2.default.createClass({
     };
     console.log(data);
     var service = new _task2.default();
-    service.add(data).then(function (response) {
-      // this.setState({ data, loading: false });
-      console.log(response);
-      if (response.message) {
-        var location = _this3.props.location;
+    var inputData = {};
+    service.uploadInputData(inputData).then(function (inputFile) {
+      service.add(Object.assign({}, data, { inputFile: inputFile })).then(function (response) {
+        // this.setState({ data, loading: false });
+        console.log(response);
+        if (response.message) {
+          var location = _this3.props.location;
 
 
-        if (location.state && location.state.nextPathname) {
-          _this3.props.router.replace(location.state.nextPathname);
+          if (location.state && location.state.nextPathname) {
+            _this3.props.router.replace(location.state.nextPathname);
+          } else {
+            // this.props.router.replace(`/tasks/${response.task._id}`);
+            _this3.props.router.replace('/dashboard');
+          }
         } else {
-          // this.props.router.replace(`/tasks/${response.task._id}`);
-          _this3.props.router.replace('/dashboard');
+          console.error(response);
         }
-      } else {
-        console.error(response);
-      }
-    }).catch(console.error);
+      }).catch(console.error);
+    });
 
     // $.ajax({
     //   type: 'POST',
@@ -26249,6 +26253,10 @@ var AddTaskPage = (0, _reactRouter.withRouter)(_react2.default.createClass({
               (0, _localizify.t)('Permutation test')
             )
           ),
+          _react2.default.createElement('br', null),
+          (0, _localizify.t)('Input data'),
+          ': ',
+          _react2.default.createElement('input', { ref: 'input', name: 'input', type: 'file', required: 'required' }),
           _react2.default.createElement('br', null),
           (0, _localizify.t)('Config file'),
           ': ',

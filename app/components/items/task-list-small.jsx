@@ -20,7 +20,7 @@ class TaskListSmallItem extends React.Component {
       <div className="row task-container">
         <div className={`task-status task-status-${status || 'new'}`}></div>
         {/* <Link to={`/task/${id}`} className="">{name}</Link> */}
-        <Link target="_blank" to={file} className="">{name}</Link>
+        <a target="_blank" href={file} className="">{name}</a>
         <span className="task-date"><span title={createdAt} className="relativetime">{t('Created')} {timeAgo(createdAt)}</span></span>
         <div className="task-description">{description}</div>
         <div className="task-description">

@@ -11,6 +11,7 @@ const taskSchema = new Schema({
   program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
   config: String,
   outputFile: String,
+  inputFile: String,
   isExucated: Boolean,
   error: String,
   exucatedTime: String,
