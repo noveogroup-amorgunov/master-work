@@ -4,8 +4,7 @@ import auth from '../auth';
 class Request {
   constructor() {
     this.apikey = 'egHug34f';
-    // this.baseUrl = `${window.config.basename}/api/`;
-    this.baseUrl = window.config.api;
+    this.baseUrl = `${window.config.proxy}/api/`;
   }
 
   /**
@@ -82,9 +81,6 @@ class Request {
     });
   }
 
-  /**
-   * public method for get data from api
-   */
   post(resource, options = {}, data = false) {
     return new Promise((resolve, reject) => {
       // add api_token to request
@@ -92,6 +88,18 @@ class Request {
       const url = this.baseUrl + Request.replaceParams(resource, options);
 
       Request.request(url, params, data, { type: 'POST' })
+      .then(result => resolve(result))
+      .catch(error => reject(error));
+    });
+  }
+
+  delete(resource, options = {}, data = false) {
+    return new Promise((resolve, reject) => {
+      // add api_token to request
+      const params = { api_token: this.apikey };
+      const url = this.baseUrl + Request.replaceParams(resource, options);
+
+      Request.request(url, params, data, { type: 'DELETE' })
       .then(result => resolve(result))
       .catch(error => reject(error));
     });

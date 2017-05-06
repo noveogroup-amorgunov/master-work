@@ -63,7 +63,7 @@ const TaskPage = withRouter(React.createClass({
 
         <div className="task-content">
           {t('Server')}: {server.name} <br />
-          {outputFile && (<a href={`https://4754dc5a.ngrok.io/uploads/${outputFile}`}>{t('Download results')}</a>)}
+          {outputFile && (<a href={`${window.config.proxy}/uploads/${outputFile}`}>{t('Download results')}</a>)}
         </div>
       </div>
     );

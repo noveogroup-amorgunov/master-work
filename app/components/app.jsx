@@ -9,25 +9,27 @@ import Footer from './layout/footer.jsx';
 const App = React.createClass({
   getInitialState() {
     return {
-      loggedIn: auth.loggedIn()
-    }
+      loggedIn: auth.loggedIn(),
+      isAdmin: auth.isAdmin(),
+    };
   },
 
   updateAuth(loggedIn) {
     this.setState({
-      loggedIn
-    })
+      loggedIn,
+      isAdmin: auth.isAdmin(),
+    });
   },
 
   componentWillMount() {
-    auth.onChange = this.updateAuth
-    auth.login()
+    auth.onChange = this.updateAuth;
+    auth.login();
   },
 
   render() {
     return (
       <div>
-        <Header loggedIn={this.state.loggedIn} />
+        <Header loggedIn={this.state.loggedIn} isAdmin={this.state.isAdmin} />
         <section className="content" id="main">
           {this.props.children}
         </section>

@@ -15,11 +15,16 @@ const userSchema = new Schema({
   firstname: String,
   secondname: String,
   job: String,
-
+  comment: String,
+  phone: String,
+  isActive: {
+    type: Boolean,
+    default: false
+  },
   roles: {
     type: String,
     enum: ['admin', 'user'],
-    default: 'admin'
+    default: 'user'
   },
 }, {
   timestamps: {

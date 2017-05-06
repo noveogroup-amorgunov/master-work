@@ -6,6 +6,7 @@
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
+    "start": "nodemon server/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alexander Morgunov <fxl@list.ru>",
@@ -54,6 +55,7 @@
     "jsx-loader": "^0.13.2",
     "mocha": "^3.0.2",
     "node-static": "^0.7.9",
+    "nodemon": "^1.11.0",
     "sinon": "^1.17.6",
     "static": "^2.0.0",
     "style-loader": "^0.16.1",

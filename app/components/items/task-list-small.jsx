@@ -14,7 +14,7 @@ class TaskListSmallItem extends React.Component {
     console.log(this.props.data);
     const { _id: id, outputFile, error, status, name, created_at: createdAt, description, exucatedTime } = this.props.data;
     
-    const file = outputFile ? `https://4754dc5a.ngrok.io/uploads/${outputFile}` : '#';
+    const file = outputFile ? `${window.config.proxy}/uploads/${outputFile}` : '#';
 
     return (
       <div className="row task-container">

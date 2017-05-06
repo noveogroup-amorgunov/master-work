@@ -43,8 +43,8 @@ exports.register = (server, options, next) => {
                     Ваша задача "${task.name}"" была выполнена.
                   </p>
                   <p>
-                    Перейти в личный кабинет: https://4754dc5a.ngrok.io/dashboard<br>
-                    Выгрузить результаты: https://4754dc5a.ngrok.io/uploads/${path}
+                    Перейти в личный кабинет: ${process.env.PROXY}/dashboard<br>
+                    Выгрузить результаты: ${process.env.PROXY}/uploads/${path}
                   </p>
                 `;
 
@@ -64,7 +64,7 @@ exports.register = (server, options, next) => {
                 Ваша задача "${task.name}"" не была выполнена (сообщение ошибки: ${task.error})
               </p>
               <p>
-                Перейти в личный кабинет: <a href="https://4754dc5a.ngrok.io/dashboard">https://4754dc5a.ngrok.io/dashboard</a><br>
+                Перейти в личный кабинет: <a href="${process.env.PROXY}/dashboard">${process.env.PROXY}/dashboard</a><br>
               </p>
             `;
 

@@ -21,7 +21,7 @@ function pretendRegisterRequest(data, cb) {
   console.log(`pretendRegisterRequest: ${JSON.stringify(data)}`);
   $.ajax({
     type: 'POST',
-    url: `${window.config.api}signup`,
+    url: `${window.config.proxy}/api/signup`,
     contentType: 'application/json',
     data: JSON.stringify(data),
     success: (response) => {
@@ -47,7 +47,7 @@ function pretendRequest(data, cb) {
   console.log(`pretendREquest: ${JSON.stringify(data)}`);
   $.ajax({
     type: 'POST',
-    url: `${window.config.api}login`,
+    url: `${window.config.proxy}/api/login`,
     contentType: 'application/json',
     data: JSON.stringify(data),
     success: (response) => {
@@ -91,6 +91,7 @@ export default {
         localStorage.token = res.token;
         localStorage.userId = res.user._id;
         localStorage.email = data.email;
+        localStorage.isAdmin = !!res.user.isAdmin;
         if (cb) cb(true, res.message);
         this.onChange(true);
       } else {
@@ -111,9 +112,9 @@ export default {
 
     pretendRegisterRequest(data, (res) => {
       if (res.authenticated) {
-        localStorage.token = res.token;
+        /*localStorage.token = res.token;
         localStorage.email = data.email;
-        localStorage.userId = res.user._id;
+        localStorage.userId = res.user._id;*/
         if (cb) cb(true, res.message);
         this.onChange(true);
       } else {
@@ -139,12 +140,18 @@ export default {
     delete localStorage.token;
     delete localStorage.email;
     delete localStorage.userId;
+    delete localStorage.isAdmin;
     if (cb) cb();
     this.onChange(false);
   },
 
   loggedIn() {
     return !!localStorage.token;
+  },
+
+  isAdmin() {
+    // hack that localStorage save isAdmin as string -_-
+    return this.loggedIn() && localStorage.isAdmin == 'true';
   },
 
   onChange() {}

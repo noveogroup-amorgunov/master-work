@@ -1,21 +1,23 @@
-import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import React from 'react';
 import { Router, useRouterHistory /*, browserHistory*/ } from 'react-router';
 import localizify from 'localizify';
 import { createHistory } from 'history';
 
 import en from './messages/en.json';
 import ru from './messages/ru.json';
+import routes from './routers/routers.jsx';
 
-import routes from 'routers/routers.jsx';
+window.config = {
+  basename: '/',
+  proxy: 'https://1530abbe.ngrok.io'
+  // 'https://4754dc5a.ngrok.io/'
+};
 
 localizify
   .add('en', en)
   .add('ru', ru)
   .setLocale(localStorage.locale || 'en');
-
-// console.log(localizify.getLocale());
 
 const browserHistory = useRouterHistory(createHistory)({
   basename: window.config.basename

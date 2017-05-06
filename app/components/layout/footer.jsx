@@ -4,7 +4,7 @@ import { t } from 'localizify';
 const Footer = () => (
   <footer className="footer" id="footer">
     <div className="copyright">
-      {t('Created using')} <a href="#">HapiJS</a> &amp; <a href="#">ReactJS</a>  | <span className="js-now-year">2017</span>
+    <a href="mailto:fxl@list.ru">{t('Send mail to admin')}</a> | {t('Created using')} <a href="#">HapiJS</a> &amp; <a href="#">ReactJS</a>  | <span className="js-now-year">2017</span>
     </div>
   </footer>
 );

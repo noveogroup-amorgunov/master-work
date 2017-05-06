@@ -8,16 +8,18 @@ import {
   LoginPage,
   LogoutPage,
   AddTaskPage,
-  ContactPage,
   DashboardPage,
   QuestionPage,
   QuestionsByTagPage,
   SignupPage,
   UserPage,
   ChangePasswordPage,
-  TagsPage,
   TaskPage,
   ReviewsPage,
+  UsersPage,
+  ServersPage,
+  HelpPage,
+  PermutationTestPage,
 } from '../components/index.jsx';
 
 
@@ -25,6 +27,15 @@ function requireAuth(nextState, replace) {
   if (!auth.loggedIn()) {
     replace({
       pathname: '/login',
+      state: { nextPathname: nextState.location.pathname }
+    });
+  }
+}
+
+function requireAdmin(nextState, replace) {
+  if (!auth.isAdmin()) {
+    replace({
+      pathname: '/',
       state: { nextPathname: nextState.location.pathname }
     });
   }
@@ -50,5 +61,11 @@ export default (
     <Route path="/changepassword" component={ChangePasswordPage} onEnter={requireAuth} />
 
     <Route path="/task/:id" component={TaskPage} onEnter={requireAuth} />
+
+
+    <Route path="/users" component={UsersPage} onEnter={requireAdmin} />
+    <Route path="/servers" component={ServersPage} onEnter={requireAdmin} />
+    <Route path="/help" component={HelpPage} />
+    <Route path="/permutation-test" component={PermutationTestPage} />
   </Route>
 );

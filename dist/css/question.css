@@ -646,3 +646,17 @@ a.btn:hover {
   color: white;
   opacity: 0.8;
 }
+
+.message-error {
+  font-size: 14px;
+  color: rgb(241, 24, 24);
+}
+
+.message-text {
+  font-size: 14px;
+}
+
+form.form {
+  width: 500px;
+  margin: 0 auto;
+}

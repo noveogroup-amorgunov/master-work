@@ -12,6 +12,10 @@ import UserPage from './pages/user.jsx';
 import ChangePasswordPage from './pages/change-password.jsx';
 import ReviewsPage from './pages/reviews.jsx';
 import TaskPage from './pages/task.jsx';
+import UsersPage from './pages/users.jsx';
+import ServersPage from './pages/task.jsx';
+import HelpPage from './pages/task.jsx';
+import PermutationTestPage from './pages/task.jsx';
 
 import HeaderLayout from './layout/header.jsx';
 import FooterLayout from './layout/footer.jsx';
@@ -33,7 +37,11 @@ export {
   UserPage,
   ReviewsPage,
   TaskPage,
-  ChangePasswordPage
+  ChangePasswordPage,
+  UsersPage,
+  ServersPage,
+  HelpPage,
+  PermutationTestPage,
 };
 
 export default {

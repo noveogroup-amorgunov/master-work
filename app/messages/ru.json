@@ -107,7 +107,15 @@
   "Old password is wrong": "Введен неверный старый пароль",
   "Home page": "Главная страница",
   "Input data": "Входные данные",
-  "Tasks": "Список с задачами"
+  "Tasks": "Список с задачами",
+  "User not active": "Пользователь не подтвержден администратором",
+  "After register your account will be check admin of the server": "После регистрации ваш аккаунт будет проверен администратором системы.",
+  "You get email that your accout is verified and you can use system": "Вы получи email письмо, что аккаунт подтвержден и сможете использовать систему.",
+  "phone": "Телефон",
+  "Users": "Пользователи",
+  "Servers": "Серверы",
+  "Send mail to admin": "Написать письмо администратору",
+  "Tell about why do you need access to supercomputer": "Расскажите, зачем вам нужен доступ к суперкомпьютеру"
 }
 
 

@@ -27,10 +27,15 @@ exports.register = (server, options, next) => {
           if (!user) {
             return reply({ message: 'User not found' });
           }
+          if (!user.isActive) {
+            return reply({ message: 'User not active' });
+          }
           if (password !== user.password) {
             return reply({ message: 'Password is wrong' });
           }
-          return reply({ token: getToken(user.id), user });
+          const data = user.toObject();
+          data.isAdmin = data.roles === 'admin';
+          return reply({ token: getToken(user.id), user: data });
         })
         .catch(console.error);
     }
@@ -47,7 +52,11 @@ exports.register = (server, options, next) => {
           if (foundedUser) {
             return reply({ message: 'This user has already existed' });
           }
+          request.payload.isActive = false;
+          request.payload.roles = 'user';
+
           Models.User.create(request.payload).then((user) => {
+            return reply({ token: getToken(user.id), user });
 
             const subject = 'Спасибо за регистрацию';
             const mailbody = `
@@ -56,11 +65,12 @@ exports.register = (server, options, next) => {
                 Вы успешно зарегистрировались в Scu-Permutate платформе для выполнения задач на суперкомпьютере.
               </p>
               <p>
-                Рекомендуем прочитать: <b><a href="https://4754dc5a.ngrok.io/help">Как пользоваться системой</a></b> перед началом работы.
+                Рекомендуем прочитать: <b><a href="${process.env.PROXY}/help">Как пользоваться системой</a></b> перед началом работы.<br/>
+                Перед началом работы ваш аккаунт должен подтвердить администратор.
               </p>
               <p>
-                Перейти в личный кабинет: https://4754dc5a.ngrok.io/dashboard<br>
-                Добавить новую задачу: https://4754dc5a.ngrok.io/add<br>
+                Перейти в личный кабинет: ${process.env.PROXY}/dashboard<br>
+                Добавить новую задачу: ${process.env.PROXY}/add<br>
               </p>
             `;
 
@@ -142,6 +152,89 @@ exports.register = (server, options, next) => {
   //   }
   // });
 
+
+  routes.push({
+    method: 'GET',
+    path: '/users',
+    handler(request, reply) {
+      const user = request.auth.credentials;
+      if (user.scope === 'admin') {
+        return Models.User
+          .find()
+          .sort({ created_at: -1 })
+          .then(users => reply(users));
+      }
+      return reply.forbidden();
+    }
+  });
+
+  routes.push({
+    method: 'DELETE',
+    path: '/users/{id}',
+    handler(request, reply) {
+      const id = request.params.id;
+
+      const user = request.auth.credentials;
+      if (user.scope === 'admin') {
+        return Models.User
+          .remove({ _id: id })
+          .then(() => {
+            reply({ result: 'success', code: '204' });
+          });
+      }
+      return reply.forbidden();
+    }
+  });
+
+  routes.push({
+    method: 'POST',
+    path: '/users/{id}/{action}',
+    handler(request, reply) {
+      const id = request.params.id;
+      const active = request.params.action === 'active';
+
+      if (request.auth.credentials.scope === 'admin') {
+        return Models.User
+          .findOneAndUpdate({ _id: id }, { $set: { isActive: active } }, { new: true })
+          .then((user) => {
+            let subject;
+            let mailbody;
+
+            if (user.isActive) {
+              subject = 'Активация аккаунта';
+              mailbody = `
+                <p>
+                  Добрый день, ${user.firstname},<br>
+                  Ваш аккаунт успешно подвержден в <i>Scu-Permutate</i> платформе для выполнения задач на суперкомпьютере.
+                </p>
+                <p>
+                  Рекомендуем прочитать: <b><a href="${process.env.PROXY}/help">Как пользоваться системой</a></b> перед началом работы.<br/>
+                </p>
+                <p>
+                  Перейти в личный кабинет: ${process.env.PROXY}/dashboard<br>
+                  Добавить новую задачу: ${process.env.PROXY}/add<br>
+                </p>
+              `;
+            } else {
+              subject = 'Ваш аккаунт был заблокирован';
+              mailbody = `
+                <p>
+                  Добрый день, ${user.firstname},<br>
+                  Ваш аккаунт был заблокирован администратором системы.
+                </p>
+              `;
+            }
+
+            return mail({ mailbody, subject, to: user.email }).then(() => {
+              reply(user);
+            });
+          });
+      }
+      return reply.forbidden();
+    }
+  });
+
+
   routes.push({
     method: 'GET',
     path: '/tasks',
@@ -179,5 +272,5 @@ exports.register = (server, options, next) => {
 exports.routes = { prefix: '/api' };
 exports.register.attributes = {
   name: 'api-routes',
-  version: '1.0.0'
+  version: '1.0.1'
 };
