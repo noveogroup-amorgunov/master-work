@@ -73,26 +73,33 @@ const UserPage = React.createClass({
       <div>
         <h2>{this.props.dashboard ? t('Hello') + ', ' : t('User\'s page')} {username}</h2>
 
-        <Link to="/add" className="btn btn-block btn-social btn-linkedin" type="submit">{t('Add task')}</Link>
-
-        {/* <div className="user-stats">
-          <div className="row">
-              <div className="stat answers col-3">
-                  <span className="number">{tasks.length}</span>
-                  {declOfNum(tasks.length, [t('question'), t('questions'), t('questions-2')])}
-              </div>
-          </div>
-        </div> */}
-        <div className="clear"></div>
-        <div className="margin-top-20">
-          <h2>{t('Tasks')}:</h2>
-          <a href="#" onClick={this.onUpdate}>{t('Update tasks list')}</a>
-          <TaskListSmall data={tasks} />
+        <div className="grey">
+          {t('Here you can see own profile, add new task and see list of your tasks')}.
         </div>
-        {/* <div className="margin-top-20">
-          <h2>{t('Answer')}</h2>
-          <AnswerListSmall data={answers} />
-        </div> */}
+        <hr className="light" />
+        <div className="margin-top-20">
+
+          <Link to="/add" className="btn btn-block btn-social btn-linkedin" type="submit">{t('Add task')}</Link>
+
+          {/* <div className="user-stats">
+            <div className="row">
+                <div className="stat answers col-3">
+                    <span className="number">{tasks.length}</span>
+                    {declOfNum(tasks.length, [t('question'), t('questions'), t('questions-2')])}
+                </div>
+            </div>
+          </div> */}
+          <div className="clear"></div>
+          <div className="margin-top-20">
+            <h2>{t('Tasks')}:</h2>
+            <a href="#" onClick={this.onUpdate}>{t('Update tasks list')}</a>
+            <TaskListSmall data={tasks} />
+          </div>
+          {/* <div className="margin-top-20">
+            <h2>{t('Answer')}</h2>
+            <AnswerListSmall data={answers} />
+          </div> */}
+        </div>
       </div>
     );
   }

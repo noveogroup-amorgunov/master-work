@@ -23,6 +23,10 @@ class TaskService {
   get() {
     return this.request.get('tasks');
   }
+
+  delete(id) {
+    return this.request.delete('tasks/{id}', { id });
+  }
 }
 
 export default TaskService;

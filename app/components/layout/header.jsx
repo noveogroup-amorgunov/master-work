@@ -24,7 +24,9 @@ class Header extends React.Component {
               {this.props.isAdmin && (
                 <li className="li"><Link to="/users" activeClassName="active"><u>{t('Users')}</u></Link></li>
               )}
-
+              {this.props.isAdmin && (
+                <li className="li"><Link to="/servers" activeClassName="active"><u>{t('Servers')}</u></Link></li>
+              )}
               <li className="li right"><LanguageSwitcher /></li>
               <li className="li right">
                 {this.props.loggedIn ? (

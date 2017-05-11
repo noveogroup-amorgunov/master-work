@@ -7,6 +7,11 @@ const serverSchema = new Schema({
   name: String,
   settings: [Schema.Types.Mixed],
   isAvailable: Boolean,
+  img: {
+    type: String,
+    enum: ['supercomputer', 'webserver'],
+    default: 'webserver'
+  },
 }, {
   timestamps: {
     createdAt: 'created_at',

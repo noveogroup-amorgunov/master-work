@@ -5,6 +5,9 @@ mongoose.Promise = global.Promise;
 const reviewSchema = new mongoose.Schema({
   text: String,
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  email: String,
+  username: String,
+  answer: String,
 }, {
   timestamps: {
     createdAt: 'created_at',

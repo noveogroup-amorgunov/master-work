@@ -10,14 +10,14 @@ import routes from './routers/routers.jsx';
 
 window.config = {
   basename: '/',
-  proxy: 'https://1530abbe.ngrok.io'
+  proxy: process.env.API_URL
   // 'https://4754dc5a.ngrok.io/'
 };
 
 localizify
   .add('en', en)
   .add('ru', ru)
-  .setLocale(localStorage.locale || 'en');
+  .setLocale(localStorage.locale || localizify.detectLocale() || 'en');
 
 const browserHistory = useRouterHistory(createHistory)({
   basename: window.config.basename

@@ -31,9 +31,15 @@ const UsersPage = React.createClass({
 
     return (
       <DocumentTitle title={t('Users')}>
-        <div className="margin-top-20">
-          <h2>{t('Users')}:</h2>
-          <UserList data={this.state.users} />
+        <div>
+          <h2>{t('Users')}</h2>
+          <div className="grey">
+            {t('Here you can active/disactive users, see information about users')}.
+          </div>
+          <hr className="light" />
+          <div className="margin-top-20">
+            <UserList data={this.state.users} />
+          </div>
         </div>
       </DocumentTitle>
     );

@@ -37,7 +37,7 @@ const LoginPage = withRouter(
     render() {
       return (
         <form className="form" onSubmit={this.handleSubmit}>
-          <label><input required="required" type="email" ref="email" placeholder={t('email')} defaultValue="joe@mail.ru" /></label><br />
+          <label><input required="required" type="email" ref="email" placeholder={t('email')} defaultValue="" /></label><br />
           <label><input required="required" type="password" ref="pass" placeholder={t('password')} /></label><br />
           <button className="btn btn-block btn-social btn-linkedin" type="submit">{t('Login to system')}</button>
           <span className="message-error">

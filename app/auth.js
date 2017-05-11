@@ -92,6 +92,8 @@ export default {
         localStorage.userId = res.user._id;
         localStorage.email = data.email;
         localStorage.isAdmin = !!res.user.isAdmin;
+        localStorage.userName = `${res.user.firstname} ${res.user.secondname}`;
+        
         if (cb) cb(true, res.message);
         this.onChange(true);
       } else {
@@ -112,16 +114,21 @@ export default {
 
     pretendRegisterRequest(data, (res) => {
       if (res.authenticated) {
-        /*localStorage.token = res.token;
+        /* localStorage.token = res.token;
         localStorage.email = data.email;
-        localStorage.userId = res.user._id;*/
+        localStorage.userId = res.user._id; */
         if (cb) cb(true, res.message);
-        this.onChange(true);
+        // this.onChange(true);
+        this.onChange(false);
       } else {
         if (cb) cb(false, res.message);
         this.onChange(false);
       }
     });
+  },
+
+  getName() {
+    return localStorage.userName;
   },
 
   getToken() {
@@ -141,6 +148,7 @@ export default {
     delete localStorage.email;
     delete localStorage.userId;
     delete localStorage.isAdmin;
+    delete localStorage.userName;
     if (cb) cb();
     this.onChange(false);
   },

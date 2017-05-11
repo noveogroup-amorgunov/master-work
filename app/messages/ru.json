@@ -115,13 +115,43 @@
   "Users": "Пользователи",
   "Servers": "Серверы",
   "Send mail to admin": "Написать письмо администратору",
-  "Tell about why do you need access to supercomputer": "Расскажите, зачем вам нужен доступ к суперкомпьютеру"
+  "Tell about why do you need access to supercomputer": "Расскажите, зачем вам нужен доступ к суперкомпьютеру",
+  "Page not found": "Страница не найдена",
+
+  "About system": "О Информационной системе",
+  "Publications": "Публикации",
+  "Presentation": "Презентация",
+  "Article": "Статья",
+  "Guest": "Гость",
+  "Active": "Активировать",
+  "Disactive": "Деактивировать",
+  "Delete": "Удалить",
+
+  "your email": "Ваш электронный адрес",
+  "your name": "Ваше имя",
+  "Add review": "Добавить отзыв",
+  "Get answer": "Ответить",
+  "Here you can leave a feedback about the platform or ask a question": "Здесь вы можете оставить отзыв о платформе или задать вопрос",
+  "Here you can active/disactive users, see information about users": "Здесь вы можете активировать/деактивировать профиль пользователя, посмотреть информацию о пользователях",
+  "Here you can see own profile, add new task and see list of your tasks": "Здесь вы можете посмотреть свой профиль, добавить новую задачу и посмотреть список с задачами",
+  "Here you can turn on or off servers": "Здесь вы можете включить или отключить сервера",
+
+
+  "to perform tasks": "для выполнения задач",
+  "Help": "Помощь",
+  "active": "активный",
+  "disactive": "выключенный",
+  "turn off server": "выключить сервер",
+  "turn on server": "включить сервер",
+
+  "the permutation test": "перестановочного теста",
+  "The Siberian Supercomputer Center SB RAS": "Сибирского Суперкомпьютерного центра",
+  "The test for the analysis of genetic determination of traits": "Проведение ПТ для анализа генетической детерминации признаков",
+  "The information system is designed to provide convenient access to users for computing resources": "Информационная система предназначена для предоставления удобного доступа пользователям к вычислительным ресурсам",
+
+  "Available programs for the permutation test (PT)": "Доступные программы для проведения перестановочного теста (ПТ)",
+  "Also the system supports the possibility of sharing the experience of using the permutation test and the results obtained with the tools of the electronic library and the possibility of open discussion of published articles.": "Также система поддерживает возможность обмена опытом использования перестановочного теста и полученными результатами средствами электронной библиотеки и возможности открытого обсуждения опубликованных статей.",
+
+  "We are sorry but the page you are looking for does not exist": "Мы сожалеем, но страница не найдена, возможно она была перемещена или удалена",
+  "Go to main page?": "Перейти на главную?"
 }
-
-
-
-
-
-
-
-

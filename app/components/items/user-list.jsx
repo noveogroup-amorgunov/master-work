@@ -14,18 +14,20 @@ class UserItem extends React.Component {
     const data = this.props.data;
     const button = {
       onClick: this.props.onActive,
-      text: 'Активировать',
+      text: t('Active'),
     };
     if (data.isActive) {
       button.onClick = this.props.onDisactive;
-      button.text = 'Деактивировать';
+      button.text = t('Disactive');
     }
 
+    // {/*  */}
+
     return (
-      <div className="row task-container" style={{ height: '120px' }}>
+      <div className="row task-container" style={{ height: 'auto' }}>
         {data.roles !== 'admin' && (<div style={{ float: 'right', width: '120px' }}>
           <a data-id={data._id} href="#" onClick={button.onClick} style={{ height: '23px', padding: '0px 5px' }} className="btn btn-block btn-social btn-linkedin">{button.text}</a>
-          <a data-id={data._id} href="#" onClick={this.props.onDelete} style={{ height: '23px', padding: '0px 5px' }} className="btn btn-block btn-social btn-github">Удалить</a>
+          <a data-id={data._id} href="#" onClick={this.props.onDelete} style={{ height: '23px', padding: '0px 5px' }} className="btn btn-block btn-social btn-github">{t('Delete')}</a>
         </div>)}
         <div style={{ fontSize: '16px' }}><b>{data.firstname} {data.secondname}</b></div>
         <div>

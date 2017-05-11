@@ -32,7 +32,6 @@ const SignupPage = withRouter(
         }
 
         const { location } = this.props;
-
         if (location.state && location.state.nextPathname) {
           this.props.router.replace(location.state.nextPathname);
         } else {

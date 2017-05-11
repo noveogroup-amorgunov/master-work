@@ -1,3 +1,5 @@
+require('dotenv-extended').load();
+
 const path = require('path');
 const { resolve } = require('path');
 const webpack = require('webpack');
@@ -38,6 +40,11 @@ const defaults = {
       'jQuery': 'jquery',
       'window.jQuery': 'jquery',
     }),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'API_URL': JSON.stringify(process.env.PROXY)
+      }
+    })
   ],
 };
 
