@@ -16,11 +16,10 @@ $ npm install nodemon webpack -g
 
 Change `.env` config file (`PROXY` - address of server which I used as `ngrok`).
 
-Change `window.config` in `app/index.jsx`.
 
 ```shell
 $ npm run build # build client-side bundle
-$ npm strt # run server from nodemon
+$ npm start # run server from nodemon
 ```
 
 ```shell
