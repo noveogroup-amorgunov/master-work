@@ -21,6 +21,27 @@ class ReviewItem extends React.Component {
       user.username = `${user.firstname} ${user.secondname}`;
     }
 
+    const formatLabel = (label, value) => {
+      if (!value) {
+        return label;
+      }
+      return (<span>
+        { label.split(value)
+          .reduce((prev, current, i) => {
+            if (!i) {
+              return [current];
+            }
+            return prev.concat(<Link to="/help" key={value + current}><b>{t('Help')}</b></Link>, current);
+          }, [])
+        }
+      </span>);
+    };
+
+    let answer = false;
+    if (data.answer) {
+      answer = formatLabel(data.answer, '{/help}');
+    }
+
 /*
     {data.roles !== 'admin' && (<div style={{ float: 'right', width: '120px' }}>
       <a data-id={data._id} href="#" onClick={button.onClick} style={{ height: '23px', padding: '0px 5px' }} className="btn btn-block btn-social btn-linkedin">{button.text}</a>
@@ -45,9 +66,24 @@ class ReviewItem extends React.Component {
         </div>
         <div className="review-text">
           {data.text}
+          {data.answer && (<div style={{ paddingTop: '10px' }}>
+            <span className="review-text-answer">
+              <b>{t('Admin answer')}: </b> {answer}
+            </span>
+          </div>)}
         </div>
         {auth.isAdmin() && (<div className="review-answer">
-          <a href="#" data-id={data._id}>{t('Get answer')}</a>
+
+          <div className="review-answer-form hidden">
+            <hr />
+            <form className="form">
+              <label>
+                <textarea placeholder={t('Type your answer')}></textarea>
+              </label>
+            </form>
+          </div>
+
+          <a href="#" onClick={this.props.onAnswer} data-id={data._id}>{t('Get answer')}</a>
         </div>)}
       </div>
     );
@@ -71,18 +107,25 @@ class ReviewList extends React.Component {
   }
 
   onAnswer(event) {
-    event.stopPropagation();
-    this.setState({ loading: true });
-    const id = $(event.target).data('id');
+    event.preventDefault();
+    const $form = $(event.target).parent().find('.review-answer-form');
+    const answer = $form.find('textarea').val();
+    if (!answer) {
+      $form.toggleClass('hidden');
+    } else {
+      this.setState({ loading: true });
+      const id = $(event.target).data('id');
 
-    this.service.delete(id).then(() => {
-      this.service.get().then((reviews) => {
-        this.setState({
-          loading: false,
-          reviews
+      this.service
+        .addAnswer({ id, answer })
+        .then(() => {
+          $form.toggleClass('hidden');
+          $form.find('textarea').val('');
+          this.service.get().then((reviews) => {
+            this.setState({ loading: false, reviews });
+          });
         });
-      });
-    });
+    }
   }
 
   handleSubmit(event) {

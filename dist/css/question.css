@@ -638,6 +638,11 @@ input:focus {
   font-size: 12px;
 }
 
+.review-text-answer {
+  background: rgba(255, 255, 0, 0.2);
+  padding: 3px 5px;
+}
+
 .task-error {
   color: #e91e63;
 }
@@ -800,6 +805,11 @@ textarea.error {
 
 textarea.success {
   border: 1px solid #4CAF50;
+}
+
+.ol-list li {
+  padding-bottom: 10px;
+
 }
 
 

@@ -9,6 +9,11 @@ class ReviewService {
     return this.request.post('reviews', {}, data);
   }
 
+  addAnswer(data) {
+    const { id, answer } = data;
+    return this.request.post('reviews/{id}/add-answer', { id }, { answer });
+  }
+
   get() {
     return this.request.get('reviews');
   }

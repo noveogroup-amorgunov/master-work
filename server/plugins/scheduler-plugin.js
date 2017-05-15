@@ -36,11 +36,11 @@ exports.register = (server, options, next) => {
                 return task.save();
               })
               .then(() => {
-                const subject = `Успешное выволнение задачи ${task.name}`;
+                const subject = `Успешное выполнение задачи ${task.name}`;
                 const mailbody = `
                   <p>
                     Добрый день, ${username},<br>
-                    Ваша задача "${task.name}"" была выполнена.
+                    Ваша задача "${task.name}" была выполнена.
                   </p>
                   <p>
                     Перейти в личный кабинет: ${process.env.PROXY}/dashboard<br>

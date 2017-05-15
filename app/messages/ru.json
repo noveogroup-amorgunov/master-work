@@ -143,6 +143,9 @@
   "disactive": "выключенный",
   "turn off server": "выключить сервер",
   "turn on server": "включить сервер",
+  "Type your answer": "Введите ваш ответ",
+  "Admin answer": "Ответ администратора",
+  "Only russian yet": "На данный момент только на русском языке",
 
   "the permutation test": "перестановочного теста",
   "The Siberian Supercomputer Center SB RAS": "Сибирского Суперкомпьютерного центра",

@@ -33,10 +33,15 @@ exports.register = (server, options, next) => {
   route('DELETE /tasks/{id}', taskController.delete);
 
   route('/reviews', reviewController.get, true);
+  route('POST /reviews/{id}/add-answer', reviewController.addAnswer);
   route('POST /reviews', reviewController.add, true);
   route('PUT /reviews/{id}', reviewController.update);
 
   route('POST /programs/permutation-test/validate', programController.validate, true);
+
+  route('* /{p*}', (request, reply) => {
+    reply.notFound(404);
+  });
 
 
   route('/test', (request, reply) => {

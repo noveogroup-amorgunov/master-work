@@ -20361,6 +20361,10 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _jquery = __webpack_require__(10);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
 var _localizify = __webpack_require__(4);
 
 var _reactRouter = __webpack_require__(5);
@@ -20439,6 +20443,24 @@ var UserPage = _react2.default.createClass({
       });
     });
   },
+  onDelete: function onDelete(event) {
+    var _this3 = this;
+
+    var id = (0, _jquery2.default)(event.target).data('id');
+
+    var taskService = new _task2.default();
+    this.setState({ loading: true });
+    taskService.delete(id).then(function () {
+      _this3.setState({ loading: false });
+      var tasks = _this3.state.tasks.filter(function (item) {
+        return id !== item._id;
+      });
+      _this3.setState({
+        isExist: true,
+        tasks: tasks
+      });
+    });
+  },
   render: function render() {
     if (this.state.loading) {
       return _react2.default.createElement(_loader2.default, { isActive: 'true' });
@@ -20499,7 +20521,7 @@ var UserPage = _react2.default.createClass({
             { href: '#', onClick: this.onUpdate },
             (0, _localizify.t)('Update tasks list')
           ),
-          _react2.default.createElement(_taskListSmall2.default, { data: tasks })
+          _react2.default.createElement(_taskListSmall2.default, { data: tasks, onDelete: this.onDelete })
         )
       )
     );
@@ -25298,6 +25320,9 @@ module.exports = {
 	"disactive": "выключенный",
 	"turn off server": "выключить сервер",
 	"turn on server": "включить сервер",
+	"Type your answer": "Введите ваш ответ",
+	"Admin answer": "Ответ администратора",
+	"Only russian yet": "На данный момент только на русском языке",
 	"the permutation test": "перестановочного теста",
 	"The Siberian Supercomputer Center SB RAS": "Сибирского Суперкомпьютерного центра",
 	"The test for the analysis of genetic determination of traits": "Проведение ПТ для анализа генетической детерминации признаков",
@@ -26033,7 +26058,7 @@ var TaskListSmallItem = function (_React$Component) {
   _createClass(TaskListSmallItem, [{
     key: 'render',
     value: function render() {
-      console.log(this.props.data);
+      // console.log(this.props.data);
       var _props$data = this.props.data,
           id = _props$data._id,
           outputFile = _props$data.outputFile,
@@ -26065,6 +26090,16 @@ var TaskListSmallItem = function (_React$Component) {
             (0, _localizify.t)('Created'),
             ' ',
             (0, _timeAgo2.default)(createdAt)
+          ),
+          ' ',
+          _react2.default.createElement(
+            'span',
+            null,
+            _react2.default.createElement(
+              'a',
+              { href: '#', 'data-id': id, onClick: this.props.onDelete },
+              (0, _localizify.t)('Delete')
+            )
           )
         ),
         _react2.default.createElement(
@@ -26093,6 +26128,8 @@ var TaskListSmall = _react2.default.createClass({
   displayName: 'TaskListSmall',
   componentDidMount: function componentDidMount() {},
   render: function render() {
+    var _this2 = this;
+
     var data = this.props.data;
 
     if (!data || !data.length) {
@@ -26110,7 +26147,10 @@ var TaskListSmall = _react2.default.createClass({
         return _react2.default.createElement(
           'div',
           { key: index },
-          _react2.default.createElement(TaskListSmallItem, { data: item })
+          _react2.default.createElement(TaskListSmallItem, {
+            data: item,
+            onDelete: _this2.props.onDelete
+          })
         );
       })
     );
@@ -45458,6 +45498,35 @@ var ReviewItem = function (_React$Component) {
         user.username = user.firstname + ' ' + user.secondname;
       }
 
+      var formatLabel = function formatLabel(label, value) {
+        if (!value) {
+          return label;
+        }
+        return _react2.default.createElement(
+          'span',
+          null,
+          label.split(value).reduce(function (prev, current, i) {
+            if (!i) {
+              return [current];
+            }
+            return prev.concat(_react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/help', key: value + current },
+              _react2.default.createElement(
+                'b',
+                null,
+                (0, _localizify.t)('Help')
+              )
+            ), current);
+          }, [])
+        );
+      };
+
+      var answer = false;
+      if (data.answer) {
+        answer = formatLabel(data.answer, '{/help}');
+      }
+
       /*
           {data.roles !== 'admin' && (<div style={{ float: 'right', width: '120px' }}>
             <a data-id={data._id} href="#" onClick={button.onClick} style={{ height: '23px', padding: '0px 5px' }} className="btn btn-block btn-social btn-linkedin">{button.text}</a>
@@ -45499,14 +45568,44 @@ var ReviewItem = function (_React$Component) {
         _react2.default.createElement(
           'div',
           { className: 'review-text' },
-          data.text
+          data.text,
+          data.answer && _react2.default.createElement(
+            'div',
+            { style: { paddingTop: '10px' } },
+            _react2.default.createElement(
+              'span',
+              { className: 'review-text-answer' },
+              _react2.default.createElement(
+                'b',
+                null,
+                (0, _localizify.t)('Admin answer'),
+                ': '
+              ),
+              ' ',
+              answer
+            )
+          )
         ),
         _auth2.default.isAdmin() && _react2.default.createElement(
           'div',
           { className: 'review-answer' },
           _react2.default.createElement(
+            'div',
+            { className: 'review-answer-form hidden' },
+            _react2.default.createElement('hr', null),
+            _react2.default.createElement(
+              'form',
+              { className: 'form' },
+              _react2.default.createElement(
+                'label',
+                null,
+                _react2.default.createElement('textarea', { placeholder: (0, _localizify.t)('Type your answer') })
+              )
+            )
+          ),
+          _react2.default.createElement(
             'a',
-            { href: '#', 'data-id': data._id },
+            { href: '#', onClick: this.props.onAnswer, 'data-id': data._id },
             (0, _localizify.t)('Get answer')
           )
         )
@@ -45545,18 +45644,23 @@ var ReviewList = function (_React$Component2) {
     value: function onAnswer(event) {
       var _this3 = this;
 
-      event.stopPropagation();
-      this.setState({ loading: true });
-      var id = (0, _jquery2.default)(event.target).data('id');
+      event.preventDefault();
+      var $form = (0, _jquery2.default)(event.target).parent().find('.review-answer-form');
+      var answer = $form.find('textarea').val();
+      if (!answer) {
+        $form.toggleClass('hidden');
+      } else {
+        this.setState({ loading: true });
+        var id = (0, _jquery2.default)(event.target).data('id');
 
-      this.service.delete(id).then(function () {
-        _this3.service.get().then(function (reviews) {
-          _this3.setState({
-            loading: false,
-            reviews: reviews
+        this.service.addAnswer({ id: id, answer: answer }).then(function () {
+          $form.toggleClass('hidden');
+          $form.find('textarea').val('');
+          _this3.service.get().then(function (reviews) {
+            _this3.setState({ loading: false, reviews: reviews });
           });
         });
-      });
+      }
     }
   }, {
     key: 'handleSubmit',
@@ -45694,6 +45798,14 @@ var ReviewService = function () {
       return this.request.post('reviews', {}, data);
     }
   }, {
+    key: 'addAnswer',
+    value: function addAnswer(data) {
+      var id = data.id,
+          answer = data.answer;
+
+      return this.request.post('reviews/{id}/add-answer', { id: id }, { answer: answer });
+    }
+  }, {
     key: 'get',
     value: function get() {
       return this.request.get('reviews');
@@ -45727,6 +45839,8 @@ var _reactDocumentTitle2 = _interopRequireDefault(_reactDocumentTitle);
 
 var _localizify = __webpack_require__(4);
 
+var _reactRouter = __webpack_require__(5);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var HomePage = function HomePage() {
@@ -45740,6 +45854,61 @@ var HomePage = function HomePage() {
         'h2',
         null,
         (0, _localizify.t)('Help')
+      ),
+      _react2.default.createElement(
+        'div',
+        { className: 'grey' },
+        (0, _localizify.t)('Only russian yet'),
+        '.'
+      ),
+      _react2.default.createElement('hr', { className: 'light' }),
+      _react2.default.createElement(
+        'ol',
+        { className: 'ol-list' },
+        _react2.default.createElement(
+          'li',
+          null,
+          '\u041F\u0435\u0440\u0432\u044B\u043C \u0434\u0435\u043B\u043E\u043C \u043D\u0443\u0436\u043D\u043E ',
+          _react2.default.createElement(
+            'b',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/signup' },
+              '\u0437\u0430\u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0438\u0440\u043E\u0432\u0430\u0442\u044C\u0441\u044F \u0432 \u0441\u0438\u0441\u0442\u0435\u043C\u0435'
+            )
+          ),
+          '. \u041F\u043E\u0441\u043B\u0435 \u0440\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u0438 \u0432\u0430\u0448 \u0430\u043A\u043A\u0430\u0443\u043D\u0442 \u0431\u0443\u0434\u0435\u0442 \u043F\u0440\u043E\u0432\u0435\u0440\u0435\u043D \u0430\u0434\u043C\u0438\u043D\u0438\u0441\u0442\u0440\u0430\u0442\u043E\u0440\u043E\u043C \u0441\u0438\u0441\u0442\u0435\u043C\u044B. \u0412\u044B \u043F\u043E\u043B\u0443\u0447\u0438 email \u043F\u0438\u0441\u044C\u043C\u043E, \u0447\u0442\u043E \u0430\u043A\u043A\u0430\u0443\u043D\u0442 \u043F\u043E\u0434\u0442\u0432\u0435\u0440\u0436\u0434\u0435\u043D \u0438 \u0441\u043C\u043E\u0436\u0435\u0442\u0435 \u0438\u0441\u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u044C \u0441\u0438\u0441\u0442\u0435\u043C\u0443.'
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          '\u0414\u0430\u043B\u0435\u0435 \u043D\u0443\u0436\u043D\u043E \u043F\u0435\u0440\u0435\u0439\u0442\u0438 \u0432 ',
+          _react2.default.createElement(
+            'b',
+            null,
+            _react2.default.createElement(
+              _reactRouter.Link,
+              { to: '/dashboard' },
+              '\u043B\u0438\u0447\u043D\u044B\u0439 \u043A\u0430\u0431\u0438\u043D\u0435\u0442'
+            )
+          ),
+          ' \u0438 \u043D\u0430\u0436\u0430\u0442\u044C \u043D\u0430 \u043A\u043D\u043E\u043F\u043A\u0443: "\u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C \u0437\u0430\u0434\u0430\u0447\u0443".'
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          '\u041D\u0430 \u0441\u0442\u0440\u0430\u043D\u0438\u0446\u0435 \u0434\u043E\u0431\u0430\u0432\u043B\u0435\u043D\u0438\u044F \u0437\u0430\u0434\u0430\u0447\u0438 \u043D\u0443\u0436\u043D\u043E \u0432\u0432\u0435\u0441\u0442\u0438 \u0438\u043C\u044F \u0434\u043B\u044F \u0437\u0430\u0434\u0430\u0447\u0438 \u0438 \u043E\u043F\u0438\u0441\u0430\u043D\u0438\u0435, \u0443\u043A\u0430\u0437\u0430\u0442\u044C \u0432\u0445\u043E\u0434\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435 \u0438 \u043A\u043E\u043D\u0444\u0438\u0433\u0443\u0440\u0430\u0446\u0438\u044E, \u0430 \u0442\u0430\u043A \u0436\u0435 \u0443\u043A\u0430\u0437\u0430\u0442\u044C, \u043D\u0430 \u043A\u0430\u043A\u043E\u043C \u0441\u0435\u0440\u0432\u0435\u0440 \u043F\u0440\u043E\u0438\u0437\u0432\u043E\u0434\u0438\u0442\u044C \u0432\u044B\u0447\u0438\u0441\u043B\u0435\u043D\u0438\u044F. \u041F\u043E\u0441\u043B\u0435 \u0437\u0430\u0434\u0430\u0447\u0430 \u0434\u043E\u0431\u0430\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u044C. \u041A\u0430\u043A \u0442\u043E\u043B\u044C\u043A\u043E \u0437\u0430\u0434\u0430\u0447\u0430 \u0431\u0443\u0434\u0443\u0442 \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0430, \u0412\u0430\u043C \u043D\u0430 \u044D\u043B\u0435\u043A\u0442\u0440\u043E\u043D\u043D\u0443\u044E \u043F\u0440\u0438\u0434\u0435\u0442 \u043F\u0438\u0441\u044C\u043C\u043E \u0432\u043C\u0435\u0441\u0442\u0435 \u0441 \u0441\u0441\u044B\u043B\u043A\u043E\u0439 \u0434\u043B\u044F \u0441\u043A\u0430\u0447\u0438\u0432\u0430\u043D\u0438\u044F \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u0432:',
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('br', null),
+          _react2.default.createElement('img', { src: 'https://d84525d1.ngrok.io/resources/img/help-email.png' })
+        ),
+        _react2.default.createElement(
+          'li',
+          null,
+          '\u0422\u0430\u043A \u0436\u0435 \u0438\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0438\u044E \u043E \u0437\u0430\u0434\u0430\u0447\u0435 \u043C\u043E\u0436\u043D\u043E \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u0435\u0442\u044C \u0432 \u043B\u0438\u0447\u043D\u043E\u043C \u043A\u0430\u0431\u0438\u043D\u0435\u0442\u0435 (\u0432\u0440\u0435\u043C\u044F \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F, \u0432\u0440\u0435\u043C\u044F \u043E\u0436\u0438\u0434\u0430\u043D\u0438\u044F \u0432 \u043E\u0447\u0435\u0440\u0435\u0434\u0438) \u0438 \u0443\u0434\u0430\u043B\u0438\u0442\u044C \u0441\u0442\u0430\u0440\u044B\u0435 \u043D\u0435\u0430\u043A\u0442\u0443\u0430\u043B\u044C\u043D\u044B\u0435 \u0437\u0430\u0434\u0430\u0447\u0438.'
+        )
       )
     )
   );

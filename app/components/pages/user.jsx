@@ -1,4 +1,5 @@
 import React from 'react';
+import $ from 'jquery';
 import { t } from 'localizify';
 
 import { Link } from 'react-router';
@@ -57,6 +58,21 @@ const UserPage = React.createClass({
     });
   },
 
+  onDelete(event) {
+    const id = $(event.target).data('id');
+
+    const taskService = new TaskService();
+    this.setState({ loading: true });
+    taskService.delete(id).then(() => {
+      this.setState({ loading: false });
+      const tasks = this.state.tasks.filter(item => id !== item._id);
+      this.setState({
+        isExist: true,
+        tasks
+      });
+    });
+  },
+
   render() {
     if (this.state.loading) {
       return (<Loader isActive="true" />);
@@ -93,7 +109,7 @@ const UserPage = React.createClass({
           <div className="margin-top-20">
             <h2>{t('Tasks')}:</h2>
             <a href="#" onClick={this.onUpdate}>{t('Update tasks list')}</a>
-            <TaskListSmall data={tasks} />
+            <TaskListSmall data={tasks} onDelete={this.onDelete} />
           </div>
           {/* <div className="margin-top-20">
             <h2>{t('Answer')}</h2>

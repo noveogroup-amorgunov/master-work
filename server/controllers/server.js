@@ -11,9 +11,6 @@ module.exports = {
   on: (request, reply) => {
     const id = request.params.id;
 
-    console.log('turn on');
-    console.log(id);
-
     Models.Server
       .findOneAndUpdate({ _id: id }, { isAvailable: true }, { new: true })
       .then(server => reply({ message: 'Success turn on server', server }));

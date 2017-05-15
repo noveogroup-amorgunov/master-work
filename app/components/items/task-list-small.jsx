@@ -11,7 +11,7 @@ import Vote from './vote';
 
 class TaskListSmallItem extends React.Component {
   render() {
-    console.log(this.props.data);
+    // console.log(this.props.data);
     const { _id: id, outputFile, error, status, name, created_at: createdAt, description, exucatedTime } = this.props.data;
     
     const file = outputFile ? `${window.config.proxy}/uploads/${outputFile}` : '#';
@@ -21,7 +21,7 @@ class TaskListSmallItem extends React.Component {
         <div className={`task-status task-status-${status || 'new'}`}></div>
         {/* <Link to={`/task/${id}`} className="">{name}</Link> */}
         <a target="_blank" href={file} className="">{name}</a>
-        <span className="task-date"><span title={createdAt} className="relativetime">{t('Created')} {timeAgo(createdAt)}</span></span>
+        <span className="task-date"><span title={createdAt} className="relativetime">{t('Created')} {timeAgo(createdAt)}</span> <span><a href="#" data-id={id} onClick={this.props.onDelete}>{t('Delete')}</a></span></span>
         <div className="task-description">{description}</div>
         <div className="task-description">
           {status === 'done' && `${t('Time of exucated')}: ${(exucatedTime || 0) / 1000} ${t('sec')}`}
@@ -46,7 +46,10 @@ const TaskListSmall = React.createClass({
       <div className="tasks-list-small">
         {data.map((item, index) =>
           <div key={index}>
-            <TaskListSmallItem data={item} />
+            <TaskListSmallItem
+              data={item}
+              onDelete={this.props.onDelete}
+            />
           </div>
         )}
       </div>

@@ -28,6 +28,15 @@ module.exports = {
     Models.Review
       .findOneAndUpdate({ _id: id }, payload, { new: true })
       .then(review => reply({ message: 'Success updating review', review }));
-  }
+  },
+
+  addAnswer: (request, reply) => {
+    const id = request.params.id;
+    const answer = request.payload.answer;
+
+    Models.Review
+      .findOneAndUpdate({ _id: id }, { answer }, { new: true })
+      .then(review => reply({ message: 'Success posting answer', review }));
+  },
 
 };
