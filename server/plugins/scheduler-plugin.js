@@ -4,6 +4,26 @@ const exec = require('./exec-task');
 const { sendMailTaskSuccessExucate, sendMailTaskErrorExucate } = require('../templates');
 
 
+const retrainNetwork = () => {
+  return Promise.resolve();
+};
+
+const loadInputsParams = () => {
+  return Promise.resolve();
+};
+
+const getExucatedTime = () => {
+  return Promise.resolve();
+};
+
+const getExucatedClusterTime = () => {
+  return Promise.resolve();
+};
+
+const selectServer = () => {
+  return Promise.resolve();
+};
+
 const getTask = () => {
   return Models.Task
     .find({ status: 'new' })
@@ -43,25 +63,52 @@ exports.register = (server, options, next) => {
           logger.push(`[${task.id}] Task will be send to server (automatically)..`);
           logger.push(`[${task.id}] Estimated run time: (time)`);
 
+          let selectedServer = task.server;
+          let promise = () => Promise.resolve();
+
+          // select server
+          if (!selectedServer || task.selectBestServer) {
+            // 1. get inputs params // const inputs = {};
+            // 2. get time from network const time = network.run;
+            // 3. compare cluster and server times
+            // 4. choose right server
+            // 5. IN EXEC run nessasary bash script.
+            // 6. retrain network
+
+            let time = null;
+            let clusterTime = null;
+
+            promise = () => {
+              return loadInputsParams(task)
+                .then(inputs => getExucatedTime(inputs, task))
+                .then((_time) => { time = _time; return getExucatedClusterTime(time, task); })
+                .then((_clusterTime) => { clusterTime = _clusterTime; return selectServer(clusterTime, time, task); });
+            };
+          }
+
           // todo is server == -1. don't used it
-          if (/* task.server.isAvailable && */ task.program.isActive) {
-            const startTime = Date.now();
-            task.status = 'working';
-            return task.save().then(() => {
+          // if (/* task.server.isAvailable && */ task.program.isActive) {
+          // }
+          // return handleError(task);
+
+          const startTime = Date.now();
+          task.status = 'working';
+          return promise()
+            .then(() => task.save())
+            .then(() => {
               return exec(task)
                 .then((outputFile, time) => {
                   task.status = 'done';
                   task.outputFile = outputFile;
                   task.exucatedTime = Date.now() - startTime;
+
                   logger.push(`[${task.id}] Task was exucated. Exucated time: ${task.exucatedTime}ms`);
                   return task.save();
                 })
                 .then(sendMailTaskSuccessExucate.bind(null, task))
+                .then(retrainNetwork(null, task))
                 .catch(err => handleError(task, err instanceof Error ? err : new Error(err)));
             });
-          }
-
-          return handleError(task);
         });
       })
       .catch(console.err);

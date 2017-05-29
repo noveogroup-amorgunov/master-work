@@ -26,6 +26,7 @@ class AdminPage extends React.Component {
     this.state = {
       logs: [],
       loadsCount: 0,
+      tasks: []
     };
 
     this.addLine = this.addLine.bind(this);
@@ -52,6 +53,7 @@ class AdminPage extends React.Component {
     // };
 
     this.taskServive.get().then((_tasks) => {
+      this.setState({ tasks: _tasks });
       const tasks = _tasks.reverse().filter(item => item.exucatedTime);
       const config = {
         type: 'line',
@@ -197,6 +199,8 @@ class AdminPage extends React.Component {
   }
 
   render() {
+    const tasks = this.state.tasks;
+
     return (
       <DocumentTitle title={t('Admin panel')}>
         <div>
@@ -225,8 +229,20 @@ class AdminPage extends React.Component {
           </div>
           <h3>{t('Task statistics')}</h3>
 
-          <canvas id="chart-1" width="300px" height="250px"></canvas>
-          <canvas id="chart-2" width="300px" height="250px"></canvas>
+          <div>
+            <canvas id="chart-1" width="300px" height="250px"></canvas>
+            <canvas id="chart-2" width="300px" height="250px"></canvas>
+          </div>
+          <div className="clear"></div>
+
+          <ul>
+            <li>Количество задач за все время: {tasks.length}</li>
+            <li>Количество успешно выполненных задач: {tasks.map(item => item.status === 'done' && !!item.exucatedTime).length}</li>
+            <li>Количество задач, отправленных на кластер: 5</li>
+            <li>Количество задач, выполненных на сервере: 10</li>
+            <li>Среднее время выполнения программы: 10.5 сек.</li>
+          </ul>
+
           {/* <button onClick={this.addLine}>Add line</button> */}
         </div>
       </DocumentTitle>);

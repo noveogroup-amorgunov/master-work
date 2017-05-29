@@ -27286,7 +27286,8 @@ var AdminPage = function (_React$Component) {
 
     _this.state = {
       logs: [],
-      loadsCount: 0
+      loadsCount: 0,
+      tasks: []
     };
 
     _this.addLine = _this.addLine.bind(_this);
@@ -27317,6 +27318,7 @@ var AdminPage = function (_React$Component) {
       // };
 
       this.taskServive.get().then(function (_tasks) {
+        _this2.setState({ tasks: _tasks });
         var tasks = _tasks.reverse().filter(function (item) {
           return item.exucatedTime;
         });
@@ -27489,6 +27491,8 @@ var AdminPage = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var tasks = this.state.tasks;
+
       return _react2.default.createElement(
         _reactDocumentTitle2.default,
         { title: (0, _localizify.t)('Admin panel') },
@@ -27556,8 +27560,46 @@ var AdminPage = function (_React$Component) {
             null,
             (0, _localizify.t)('Task statistics')
           ),
-          _react2.default.createElement('canvas', { id: 'chart-1', width: '300px', height: '250px' }),
-          _react2.default.createElement('canvas', { id: 'chart-2', width: '300px', height: '250px' })
+          _react2.default.createElement(
+            'div',
+            null,
+            _react2.default.createElement('canvas', { id: 'chart-1', width: '300px', height: '250px' }),
+            _react2.default.createElement('canvas', { id: 'chart-2', width: '300px', height: '250px' })
+          ),
+          _react2.default.createElement('div', { className: 'clear' }),
+          _react2.default.createElement(
+            'ul',
+            null,
+            _react2.default.createElement(
+              'li',
+              null,
+              '\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0434\u0430\u0447 \u0437\u0430 \u0432\u0441\u0435 \u0432\u0440\u0435\u043C\u044F: ',
+              tasks.length
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              '\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043D\u044B\u0445 \u0437\u0430\u0434\u0430\u0447: ',
+              tasks.map(function (item) {
+                return item.status === 'done' && !!item.exucatedTime;
+              }).length
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              '\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0434\u0430\u0447, \u043E\u0442\u043F\u0440\u0430\u0432\u043B\u0435\u043D\u043D\u044B\u0445 \u043D\u0430 \u043A\u043B\u0430\u0441\u0442\u0435\u0440: 5'
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              '\u041A\u043E\u043B\u0438\u0447\u0435\u0441\u0442\u0432\u043E \u0437\u0430\u0434\u0430\u0447, \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u043D\u044B\u0445 \u043D\u0430 \u0441\u0435\u0440\u0432\u0435\u0440\u0435: 10'
+            ),
+            _react2.default.createElement(
+              'li',
+              null,
+              '\u0421\u0440\u0435\u0434\u043D\u0435\u0435 \u0432\u0440\u0435\u043C\u044F \u0432\u044B\u043F\u043E\u043B\u043D\u0435\u043D\u0438\u044F \u043F\u0440\u043E\u0433\u0440\u0430\u043C\u043C\u044B: 10.5 \u0441\u0435\u043A.'
+            )
+          )
         )
       );
     }

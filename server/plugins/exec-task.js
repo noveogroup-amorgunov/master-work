@@ -44,8 +44,6 @@ module.exports = function execTask(task) {
               return reject(err);
             }
 
-            logger.push(`[${task.id}] Files was prepared before send to cluster`);
-
             // + 6. copy this folder by ssh to server (IT'S MOST IMPORTANT POINT)
             // + 6.1 - create bash script for this work
             // + 7. run bash script into ssh for run permutation test
@@ -53,7 +51,7 @@ module.exports = function execTask(task) {
             // 9. save this file in uploads
             // 10. delete temp folder ? (75%)
 
-
+            logger.push(`[${task.id}] Files was prepared before send to cluster`);
             exec(`${destination}/run.sh ${folderName}`, (err, stdout, stderr) => {
               if (err) {
                 reject(err);
