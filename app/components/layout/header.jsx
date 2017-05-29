@@ -20,12 +20,15 @@ class Header extends React.Component {
               </li>
               {/* <li className="li"><Link to="/add" activeClassName="active"><u>{t('Add')}</u></Link></li> */}
               <li className="li"><Link to="/dashboard" activeClassName="active"><u>{t('Profile')}</u></Link></li>
-              <li className="li"><Link to="/reviews" activeClassName="active"><u>{t('Reviews')}</u></Link></li>
+              {/* <li className="li"><Link to="/reviews" activeClassName="active"><u>{t('Reviews')}</u></Link></li> */}
               {this.props.isAdmin && (
                 <li className="li"><Link to="/users" activeClassName="active"><u>{t('Users')}</u></Link></li>
               )}
               {this.props.isAdmin && (
                 <li className="li"><Link to="/servers" activeClassName="active"><u>{t('Servers')}</u></Link></li>
+              )}
+              {this.props.isAdmin && (
+                <li className="li"><Link to="/admin" activeClassName="active"><u>{t('Admin')}</u></Link></li>
               )}
               <li className="li right"><LanguageSwitcher /></li>
               <li className="li right">

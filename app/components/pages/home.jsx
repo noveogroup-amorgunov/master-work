@@ -9,8 +9,8 @@ const HomePage = () => (
       <h2>{t('About system')}</h2>
       <p>{t('The information system is designed to provide convenient access to users for computing resources')} <b><a target="_blank" href="http://www.sscc.icmmg.nsc.ru/">{t('The Siberian Supercomputer Center SB RAS')}</a></b> {t('to perform tasks')} <b><a href="#">{t('the permutation test')}</a></b>.</p>
 
-      <img className="preview-img preview-img--first" src="https://d84525d1.ngrok.io/resources/img/35.JPG" />
-      <img className="preview-img" src="https://d84525d1.ngrok.io/resources/img/50.jpg" />
+      <img className="preview-img preview-img--first" src={`${window.config.proxy}/resources/img/35.JPG`} />
+      <img className="preview-img" src={`${window.config.proxy}/resources/img/50.jpg`} />
 
       <p>{t('Also the system supports the possibility of sharing the experience of using the permutation test and the results obtained with the tools of the electronic library and the possibility of open discussion of published articles.')}</p>
       <h2>{t('Publications')}</h2>

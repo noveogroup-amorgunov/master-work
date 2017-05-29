@@ -9,15 +9,17 @@ const taskSchema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   server: { type: mongoose.Schema.Types.ObjectId, ref: 'Server' },
   program: { type: mongoose.Schema.Types.ObjectId, ref: 'Program' },
-  config: String,
-  outputFile: String,
-  inputFile: String,
+  config: { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
+  outputFile: String, // { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
+  inputFile: { type: mongoose.Schema.Types.ObjectId, ref: 'File' },
   isExucated: Boolean,
   error: String,
   exucatedTime: String,
+  expectedTime: String,
+  selectBestServer: Boolean,
   status: {
     type: String,
-    enum: ['new', 'pending', 'done', 'error'],
+    enum: ['new', 'pending', 'working', 'done', 'error'],
     default: 'new'
   },
 }, {

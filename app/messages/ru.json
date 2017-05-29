@@ -156,5 +156,35 @@
   "Also the system supports the possibility of sharing the experience of using the permutation test and the results obtained with the tools of the electronic library and the possibility of open discussion of published articles.": "Также система поддерживает возможность обмена опытом использования перестановочного теста и полученными результатами средствами электронной библиотеки и возможности открытого обсуждения опубликованных статей.",
 
   "We are sorry but the page you are looking for does not exist": "Мы сожалеем, но страница не найдена, возможно она была перемещена или удалена",
-  "Go to main page?": "Перейти на главную?"
+  "Go to main page?": "Перейти на главную?",
+
+
+  "Admin": "Админ панель",
+  "Admin panel": "Админ панель",
+
+  "Task time exucating": "Время выполнения задачи",
+  "Time, sec": "Время, секунды",
+  "Task count": "Количество задач",
+  "Date": "Дата",
+  "Count of tasks": "Количество задач",
+  "Logs": "Логи системы",
+  "Task statistics": "Статистика задач",
+
+
+
+
+
+
+
+
+
+
+
+  "See example of input data file": "Посмотреть пример файла с входными данными",
+  "see example of config file": "посмотреть пример конфигурационного файла",
+  "Input file and config file is required": "Файл с входными данными или конфигурационный файл обязательны",
+  "Select server automatically": "Выбрать сервер автоматически",
+  "Config file should be matched by pattern": "Конфигурационный файл должен соответствовать шаблону",
+  "Automatically server selecting choose server which solve task is more faster": "Автоматически выбор сервера запустит задачу на сервере, который сможет решить задачу быстрее (на вычислительном кластере возможны простои в очереди задач)",
+  "Unvalid config": "Невалидный файл конфигурации"
 }

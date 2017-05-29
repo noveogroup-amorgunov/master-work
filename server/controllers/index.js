@@ -4,6 +4,7 @@ const userController = require('./user');
 const serverController = require('./server');
 const authController = require('./auth');
 const programController = require('./program');
+const logController = require('./log');
 
 module.exports = {
   reviewController,
@@ -12,4 +13,5 @@ module.exports = {
   serverController,
   authController,
   programController,
+  logController,
 };

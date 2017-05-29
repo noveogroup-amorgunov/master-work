@@ -3,6 +3,8 @@ const Server = require('./server');
 const Review = require('./review');
 const Program = require('./program');
 const User = require('./user');
+const File = require('./file');
+const Log = require('./logs');
 
 module.exports = {
   Task,
@@ -10,4 +12,6 @@ module.exports = {
   Review,
   Program,
   User,
+  File,
+  Log,
 };

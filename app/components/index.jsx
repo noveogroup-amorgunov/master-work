@@ -17,6 +17,7 @@ import ServersPage from './pages/machines.jsx';
 import HelpPage from './pages/help.jsx';
 import PermutationTestPage from './pages/task.jsx';
 import NotFoundPage from './pages/not-found.jsx';
+import AdminPage from './pages/admin.jsx';
 
 import HeaderLayout from './layout/header.jsx';
 import FooterLayout from './layout/footer.jsx';
@@ -44,6 +45,7 @@ export {
   HelpPage,
   PermutationTestPage,
   NotFoundPage,
+  AdminPage,
 };
 
 export default {
@@ -68,4 +70,5 @@ export default {
   HelpPage,
   PermutationTestPage,
   NotFoundPage,
+  AdminPage,
 };

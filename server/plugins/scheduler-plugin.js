@@ -1,79 +1,70 @@
 const schedule = require('node-schedule');
 const Models = require('../models');
 const exec = require('./exec-task');
-const mail = require('../helpers/email.js');
+const { sendMailTaskSuccessExucate, sendMailTaskErrorExucate } = require('../templates');
+
+
+const getTask = () => {
+  return Models.Task
+    .find({ status: 'new' })
+    .populate('server')
+    .populate('program')
+    .populate('inputFile')
+    .populate('config')
+    .populate('user');
+};
 
 // 0,30 * * * *   =>   every 30 minutes
 // 0 * * * *   =>   every hour
 // 0 */2 * * *   =>   every 2 hours
 
+const handleError = (task, err) => {
+  logger.pushError(`Error while task (${task.id}) was exucated: ${err.message}`);
+  task.status = 'error';
+  task.error = 'Server is unavailable';
+  return Promise.all([task.save(), sendMailTaskErrorExucate(task)]);
+};
+
 exports.register = (server, options, next) => {
   schedule.scheduleJob('* * * * *', () => {
-    Models.Task
-      .find({ status: 'new' })
-      .populate('server')
-      .populate('program')
-      .populate('user')
+    getTask()
       .then((tasks) => {
         if (!tasks.length) {
-          console.log('not new tasks');
+          // console.log('not new tasks');
           return;
         }
+
+        // return;
         tasks.forEach((task) => {
-          // console.log(task);
-          console.log(`Execute new task ${task.name} (${task.id})`);
-          let path = '';
           const username = `${task.user.firstname} ${task.user.secondname}`;
+          logger.push(`[${task.id}] Start exucate task "${task.name}" by ${username}`);
 
-          if (task.server.isAvailable && task.program.isActive) {
+
+          logger.push(`[${task.id}] Task will be send to server (automatically)..`);
+          logger.push(`[${task.id}] Estimated run time: (time)`);
+
+          // todo is server == -1. don't used it
+          if (/* task.server.isAvailable && */ task.program.isActive) {
             const startTime = Date.now();
-            return exec(task)
-              .then((fileName) => {
-                path = fileName;
-                task.status = 'done';
-                task.outputFile = fileName;
-                task.exucatedTime = Date.now() - startTime;
-                return task.save();
-              })
-              .then(() => {
-                const subject = `Успешное выполнение задачи ${task.name}`;
-                const mailbody = `
-                  <p>
-                    Добрый день, ${username},<br>
-                    Ваша задача "${task.name}" была выполнена.
-                  </p>
-                  <p>
-                    Перейти в личный кабинет: ${process.env.PROXY}/dashboard<br>
-                    Выгрузить результаты: ${process.env.PROXY}/uploads/${path}
-                  </p>
-                `;
-
-                return mail({ mailbody, subject, to: task.user.email });
-              })
-              .catch(console.error);
+            task.status = 'working';
+            return task.save().then(() => {
+              return exec(task)
+                .then((outputFile, time) => {
+                  task.status = 'done';
+                  task.outputFile = outputFile;
+                  task.exucatedTime = Date.now() - startTime;
+                  logger.push(`[${task.id}] Task was exucated. Exucated time: ${task.exucatedTime}ms`);
+                  return task.save();
+                })
+                .then(sendMailTaskSuccessExucate.bind(null, task))
+                .catch(err => handleError(task, err instanceof Error ? err : new Error(err)));
+            });
           }
 
-          task.status = 'error';
-          task.error = 'Server is unavailable';
-
-          const sendErrorMail = () => {
-            const subject = `Неуспешное выволнение задачи ${task.name}`;
-            const mailbody = `
-              <p>
-                Добрый день, ${username},<br>
-                Ваша задача "${task.name}"" не была выполнена (сообщение ошибки: ${task.error})
-              </p>
-              <p>
-                Перейти в личный кабинет: <a href="${process.env.PROXY}/dashboard">${process.env.PROXY}/dashboard</a><br>
-              </p>
-            `;
-
-            return mail({ mailbody, subject, to: task.user.email });
-          };
-
-          return Promise.all([task.save(), sendErrorMail()]);
+          return handleError(task);
         });
-      });
+      })
+      .catch(console.err);
   });
 
   next();

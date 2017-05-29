@@ -18,7 +18,7 @@ const HomePage = () => (
           <br />
           <br />
           <br />
-          <img src="https://d84525d1.ngrok.io/resources/img/help-email.png" />
+          <img src={`${window.config.proxy}/resources/img/help-email.png`} />
         </li>
         <li>Так же информацию о задаче можно просмотреть в личном кабинете (время выполнения, время ожидания в очереди) и удалить старые неактуальные задачи.</li>
       </ol>

@@ -29,16 +29,18 @@ class Request {
   /**
    * get request to API with params
    */
-  static request(url, params = false, data, { type }) {
+  static request(url, params = false, data, { type, file }) {
     const paramsString = params ? Request.getParams(params) : '';
     const urlWithParams = `${url}?${paramsString}`;
 
     console.log(`api request to ${urlWithParams}`);
 
-    data = data ? JSON.stringify(data) : false;
-    
+    if (!file) {
+      data = data ? JSON.stringify(data) : false;
+    }
+
     return new Promise((resolve, reject) => {
-      $.ajax({
+      const options = {
         headers: {
           Authorization: auth.getToken(),
         },
@@ -46,14 +48,19 @@ class Request {
         type,
         dataType: 'json',
         data,
-        contentType: 'application/json',
-        success: data => {
-          resolve(data);
-        },
+        contentType: file ? false : 'application/json',
+        success: resolve,
         error: (xhr, status, err) => {
           console.error(urlWithParams, status, err.toString());
         }
-      })
+      };
+
+      if (file) {
+        options.cache = false;
+        options.processData = false;
+      }
+
+      $.ajax(options);
 
       // request(urlWithParams, (error, response, body) => {
       //   const { statusCode } = response;
@@ -81,13 +88,18 @@ class Request {
     });
   }
 
-  post(resource, options = {}, data = false) {
+  post(resource, options = {}, data = false, setting = {}) {
     return new Promise((resolve, reject) => {
       // add api_token to request
-      const params = { api_token: this.apikey };
+      let params = { api_token: this.apikey };
+
+      if (setting.requestQuery) {
+        params = Object.assign({}, params, setting.requestQuery);
+      }
+
       const url = this.baseUrl + Request.replaceParams(resource, options);
 
-      Request.request(url, params, data, { type: 'POST' })
+      Request.request(url, params, data, Object.assign({}, setting, { type: 'POST' }))
       .then(result => resolve(result))
       .catch(error => reject(error));
     });

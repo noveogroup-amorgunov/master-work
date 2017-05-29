@@ -8,7 +8,10 @@ exports.register = (server, options, next) => {
     path: '/uploads/{param*}',
     config: { auth: false },
     handler: {
-      file: request => path.join(__dirname, `../uploads/${request.params.param}`)
+      file: request => {
+        // console.log(path.join(__dirname, `../uploads/${request.params.param}`));
+        return path.join(__dirname, `../../uploads/${request.params.param}`);
+      }
     }
   });
 

@@ -15,10 +15,10 @@ const defaults = {
     rules: [{
       test: /\.jsx?$/,
       exclude: /(node_modules|dist|server)/,
-      use: [{ loader:'babel-loader' }],
+      use: [{ loader: 'babel-loader' }],
     }, {
       test: /\.json$/,
-      use: [{ loader:'json-loader' }],
+      use: [{ loader: 'json-loader' }],
     }],
   },
   resolve: {
@@ -28,7 +28,6 @@ const defaults = {
     ],
     extensions: ['.js', '.jsx'],
 
-
     // modulesDirectories: ['node_modules'],
     // root: path.resolve('./app'),
   },
@@ -36,13 +35,13 @@ const defaults = {
     // Avoid publishing files when compilation fails
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.ProvidePlugin({
-      '$': 'jquery',
-      'jQuery': 'jquery',
+      $: 'jquery',
+      jQuery: 'jquery',
       'window.jQuery': 'jquery',
     }),
     new webpack.DefinePlugin({
       'process.env': {
-        'API_URL': JSON.stringify(process.env.PROXY)
+        API_URL: JSON.stringify(process.env.PROXY)
       }
     })
   ],

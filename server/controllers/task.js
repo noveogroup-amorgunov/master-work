@@ -1,4 +1,5 @@
 const Models = require('../models');
+const { makeName, makeUrl, uploadFile } = require('../helpers/upload');
 
 module.exports = {
   get: (request, reply) => {
@@ -36,9 +37,57 @@ module.exports = {
     // console.log(payload, user);
     // reply({});
 
+    if (+payload.server === -1) {
+      payload.selectBestServer = true;
+      delete payload.server;
+    }
+
     Models.Task.create(payload)
     .then((task) => {
       return reply({ message: 'Success adding task', task });
     });
-  }
+  },
+
+  uploadInput: (request, reply) => {
+    const user = request.auth.credentials;
+    const payload = request.payload;
+
+    const isConfig = request.query && request.query.config === '1';
+    let isValidConfig = true;
+
+    if (!payload.file) {
+      reply.badRequest('File is required');
+      return;
+    }
+
+    if (isConfig) {
+      const config = payload.file._data.toString('utf8');
+      const parsed = config.split('\n');
+      if (!parsed || parsed.length !== 4) {
+        isValidConfig = false;
+      }
+    }
+
+    const originalName = payload.file.hapi.filename;
+    const name = makeName(originalName, user.id);
+
+    uploadFile(payload, name)
+      .then(() => {
+        const file = new Models.File({
+          originalName,
+          path: name,
+          contentUrl: makeUrl(name),
+          contentType: payload.file.hapi.headers['content-type'],
+        });
+
+        return file.save();
+      })
+      .then((entity) => {
+        reply({ data: entity, isValidConfig }).code(201);
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(`Uploading file error ${err.message}`);
+      });
+  },
 };

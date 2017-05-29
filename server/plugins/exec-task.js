@@ -3,48 +3,93 @@ const exec = require('child_process').exec;
 const fs = require('fs');
 const path = require('path');
 const shortid = require('shortid');
+const ncp = require('ncp').ncp;
+const moment = require('moment');
+const mkdirp = require('mkdirp');
+
 const copy = require('../helpers/copy');
+const { makeName, makeFolderName, makeUrl, uploadFile } = require('../helpers/upload');
 
+ncp.limit = 16;
 
-
-// function puts(error, stdout, stderr) {
-//   sys.puts(stdout);
-// }
-
+// prepare (copy input file and config file to new temp directory to send to ssh)
 module.exports = function execTask(task) {
   return new Promise((resolve, reject) => {
-    // const stream = fs.createWriteStream('my_file.txt');
-    // stream.once('open', (fd) => {
-    //   stream.write(task.config || '');
-    //   stream.end();
-    // });
 
-    fs.writeFile(path.join(__dirname, '../programs/permutation-test/config.txt'), task.config || '', (err) => {
+    const source = path.join(__dirname, '../programs/permutation-test');
+    const folderName = shortid.generate();
+    const destination = path.join(__dirname, '../../temp/', folderName);
+    // console.log(destination);
+
+    // 1. create folder in temp directory
+    return mkdirp(destination, (err) => {
       if (err) {
         return reject(err);
       }
 
-      console.log('The file was saved!');
-      exec(path.join(__dirname, '../programs/permutation-test/run.sh'), (err, stdout, stderr) => {
+      // 2. copy to this folder files from template (program) hardcode permutation test
+      return ncp(source, destination, (err) => {
         if (err) {
-          reject(err);
+          return reject(err);
         }
-        // console.log(typeof stdout);
-        if (stdout.split(/\r?\n/).pop() === 'success') {
-          // copy output file to uploads
-          const source = path.join(__dirname, '../programs/permutation-test/output.txt');
-          const fileName = shortid.generate();
-          const target = path.join(__dirname, `../uploads/${fileName}`);
-          copy(source, target, (err) => {
+        // console.log('done!');
+
+        // 3-4. copy config and input with rename file
+        return copy(path.join(__dirname, '../../uploads/', task.config.path), `${destination}/config.txt`, (err) => {
+          if (err) {
+            return reject(err);
+          }
+          return copy(path.join(__dirname, '../../uploads/', task.inputFile.path), `${destination}/input.txt`, (err) => {
             if (err) {
               return reject(err);
             }
-            resolve(fileName);
+
+            logger.push(`[${task.id}] Files was prepared before send to cluster`);
+
+            // + 6. copy this folder by ssh to server (IT'S MOST IMPORTANT POINT)
+            // + 6.1 - create bash script for this work
+            // + 7. run bash script into ssh for run permutation test
+            // 8. send to THIS server file with results
+            // 9. save this file in uploads
+            // 10. delete temp folder ? (75%)
+
+
+            exec(`${destination}/run.sh ${folderName}`, (err, stdout, stderr) => {
+              if (err) {
+                reject(err);
+              }
+              console.log(stdout);
+              const lines = stdout.split(/\r?\n/);
+              if (lines[lines.length - 1] === 'success' || lines[lines.length - 2] === 'success') {
+                // copy output file to uploads
+                const output = makeName('output2.txt', task.user.id);
+                const target = path.join(__dirname, '../../uploads/', output);
+                // console.log(output, target);
+                copy(`${destination}/output2.txt`, target, (err) => {
+                  if (err) {
+                    return reject(err);
+                  }
+                  resolve(output);
+                });
+              } else {
+                console.error('ERROR!!!');
+                reject(stdout);
+              }
+            });
           });
-        } else {
-          reject(stdout);
-        }
+        });
       });
     });
+
+  // console.log('The file was saved!');
+  // fs.writeFile(path.join(__dirname, '../programs/permutation-test/config.txt'), task.config || '', (err) => {
+  //     if (err) {
+  //       return reject(err);
+  //     }
+  //   });
+
+  // function puts(error, stdout, stderr) {
+  //   sys.puts(stdout);
+  // }
   });
 };

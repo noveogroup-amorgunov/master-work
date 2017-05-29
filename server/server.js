@@ -14,6 +14,7 @@ const apiroutes = require('./routes/api');
 
 const jwt = require('./plugins/jwt');
 const scheduler = require('./plugins/scheduler-plugin');
+const logger = require('./plugins/logger');
 
 
 mongoose.Promise = Promise;

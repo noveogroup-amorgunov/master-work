@@ -21,6 +21,7 @@ import {
   HelpPage,
   PermutationTestPage,
   NotFoundPage,
+  AdminPage,
 } from '../components/index.jsx';
 
 
@@ -68,6 +69,7 @@ export default (
     <Route path="/servers" component={ServersPage} onEnter={requireAdmin} />
     <Route path="/help" component={HelpPage} />
     <Route path="/permutation-test" component={PermutationTestPage} />
+    <Route path="/admin" component={AdminPage} />
 
 
     <Route path="*" component={NotFoundPage} />
