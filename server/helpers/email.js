@@ -19,15 +19,20 @@ module.exports = function mail({ from = `"${gmail.name}" <${gmail.user}>`, to, s
     const mailOptions = { from, to, subject, html: mailbody };
     console.log('Sending mail in test env');
     console.log(`${JSON.stringify(mailOptions)}`);
-    smtpTransport.sendMail(mailOptions, (err, response) => {
-      if (err) {
-        console.log(err);
-        return reject(err);
-      }
-      console.log(`Mail was sended sucessfully: ${JSON.stringify(response)}`);
-      smtpTransport.close(); // shut down the connection pool, no more messages
-      resolve();
-    });
+
+    if (process.env.NODE_ENV === 'production') {
+      return smtpTransport.sendMail(mailOptions, (err, response) => {
+        if (err) {
+          console.log(err);
+          return reject(err);
+        }
+        console.log(`Mail was sended sucessfully: ${JSON.stringify(response)}`);
+        smtpTransport.close(); // shut down the connection pool, no more messages
+        return resolve();
+      });
+    }
+
+    return resolve();
   });
 };
 

@@ -37,7 +37,6 @@ class AdminPage extends React.Component {
   }
 
   componentDidMount() {
-
     const chartColors = {
       red: 'rgb(255, 99, 132)',
       orange: 'rgb(255, 159, 64)',
@@ -52,7 +51,7 @@ class AdminPage extends React.Component {
     //   return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
     // };
 
-    this.taskServive.get().then((_tasks) => {
+    this.taskServive.getAll().then((_tasks) => {
       this.setState({ tasks: _tasks });
       const tasks = _tasks.reverse().filter(item => item.exucatedTime);
       const config = {
@@ -200,6 +199,7 @@ class AdminPage extends React.Component {
 
   render() {
     const tasks = this.state.tasks;
+    const doneTask = tasks.filter(item => item.status === 'done' && !!item.exucatedTime);
 
     return (
       <DocumentTitle title={t('Admin panel')}>
@@ -237,10 +237,10 @@ class AdminPage extends React.Component {
 
           <ul>
             <li>Количество задач за все время: {tasks.length}</li>
-            <li>Количество успешно выполненных задач: {tasks.map(item => item.status === 'done' && !!item.exucatedTime).length}</li>
-            <li>Количество задач, отправленных на кластер: 5</li>
-            <li>Количество задач, выполненных на сервере: 10</li>
-            <li>Среднее время выполнения программы: 10.5 сек.</li>
+            <li>Количество успешно выполненных задач: {doneTask.length}</li>
+            <li>Количество задач, отправленных на кластер: {doneTask.filter(item => item.sendToCluster === true).length}</li>
+            <li>Количество задач, выполненных на сервере: {doneTask.filter(item => item.sendToCluster === false).length}</li>
+            <li>Среднее время выполнения программы: { Math.round(doneTask.reduce((acc, item) => (acc + (item.exucatedTime / 1000)), 0) / doneTask.length) } сек.</li>
           </ul>
 
           {/* <button onClick={this.addLine}>Add line</button> */}

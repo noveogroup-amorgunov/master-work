@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const programSchema = new mongoose.Schema({
-  name: String, // unique in ogranization
+  name: String,
   isActive: Boolean,
   path: String,
 }, {

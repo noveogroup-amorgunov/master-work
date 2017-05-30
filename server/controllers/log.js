@@ -5,7 +5,7 @@ module.exports = {
     Models.Log
       .find({})
       .sort({ created_at: -1 })
-      .limit(5)
+      .limit(10)
       .then(reply);
   },
 

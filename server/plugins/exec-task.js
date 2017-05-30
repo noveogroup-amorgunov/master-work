@@ -51,8 +51,11 @@ module.exports = function execTask(task) {
             // 9. save this file in uploads
             // 10. delete temp folder ? (75%)
 
-            logger.push(`[${task.id}] Files was prepared before send to cluster`);
-            exec(`${destination}/run.sh ${folderName}`, (err, stdout, stderr) => {
+            logger.push(`[${task.id}] Files was prepared before ${task.sendToCluster ? 'send to cluster' : 'exucate in server'}`);
+            
+            const scriptName = task.sendToCluster ? 'run.sh' : 'run-local.sh';
+
+            exec(`${destination}/${scriptName} ${folderName}`, (err, stdout, stderr) => {
               if (err) {
                 reject(err);
               }

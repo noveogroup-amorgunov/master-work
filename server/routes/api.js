@@ -30,6 +30,7 @@ exports.register = (server, options, next) => {
   router('DELETE /users/{id}', userController.delete);
 
   router('/tasks', taskController.get);
+  router('/tasks/by-user', taskController.getByUser);
   router('/tasks/{id}', taskController.getById);
   router.post('/tasks', taskController.add);
   router.delete('/tasks/{id}', taskController.delete);

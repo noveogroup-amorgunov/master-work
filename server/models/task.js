@@ -16,12 +16,16 @@ const taskSchema = new Schema({
   error: String,
   exucatedTime: String,
   expectedTime: String,
+  expectedTimeCluster: String,
+  expectedTimeServer: String,
   selectBestServer: Boolean,
+  sendToCluster: Boolean,
   status: {
     type: String,
     enum: ['new', 'pending', 'working', 'done', 'error'],
     default: 'new'
   },
+  options: Object,
 }, {
   timestamps: {
     createdAt: 'created_at',

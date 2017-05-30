@@ -21,6 +21,10 @@ class TaskService {
   }
 
   get() {
+    return this.request.get('tasks/by-user');
+  }
+
+  getAll() {
     return this.request.get('tasks');
   }
 

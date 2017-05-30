@@ -5,6 +5,7 @@ const Program = require('./program');
 const User = require('./user');
 const File = require('./file');
 const Log = require('./logs');
+const Network = require('./network');
 
 module.exports = {
   Task,
@@ -14,4 +15,5 @@ module.exports = {
   User,
   File,
   Log,
+  Network,
 };

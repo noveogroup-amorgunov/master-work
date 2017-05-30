@@ -2,10 +2,19 @@ const Models = require('../models');
 const { makeName, makeUrl, uploadFile } = require('../helpers/upload');
 
 module.exports = {
-  get: (request, reply) => {
+  getByUser: (request, reply) => {
     const user = request.auth.credentials;
     Models.Task
       .find({ user: user.id })
+      .sort({ created_at: -1 })
+      .then((tasks) => {
+        return reply(tasks);
+      });
+  },
+
+  get: (request, reply) => {
+    Models.Task
+      .find({})
       .sort({ created_at: -1 })
       .then((tasks) => {
         return reply(tasks);
