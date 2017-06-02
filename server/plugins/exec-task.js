@@ -35,7 +35,7 @@ module.exports = function execTask(task) {
         // console.log('done!');
 
         // 3-4. copy config and input with rename file
-        return copy(path.join(__dirname, '../../uploads/', task.config.path), `${destination}/config.txt`, (err) => {
+        return copy(path.join(__dirname, '../../uploads/', task.config.path), `${destination}/conf.txt`, (err) => {
           if (err) {
             return reject(err);
           }
@@ -66,7 +66,7 @@ module.exports = function execTask(task) {
                 const output = makeName('output2.txt', task.user.id);
                 const target = path.join(__dirname, '../../uploads/', output);
                 // console.log(output, target);
-                copy(`${destination}/output2.txt`, target, (err) => {
+                copy(`${destination}/output.txt`, target, (err) => {
                   if (err) {
                     return reject(err);
                   }
