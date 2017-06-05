@@ -53,7 +53,7 @@ module.exports = function execTask(task) {
 
             logger.push(`[${task.id}] Files was prepared before ${task.sendToCluster ? 'send to cluster' : 'exucate in server'}`);
             
-            const scriptName = task.sendToCluster ? 'run.sh' : 'run-local.sh';
+            const scriptName = task.sendToCluster ? 'run-cluster.sh' : 'run-local.sh';
 
             exec(`${destination}/${scriptName} ${folderName}`, (err, stdout, stderr) => {
               if (err) {
@@ -63,7 +63,7 @@ module.exports = function execTask(task) {
               const lines = stdout.split(/\r?\n/);
               if (lines[lines.length - 1] === 'success' || lines[lines.length - 2] === 'success') {
                 // copy output file to uploads
-                const output = makeName('output2.txt', task.user.id);
+                const output = makeName('output.txt', task.user.id);
                 const target = path.join(__dirname, '../../uploads/', output);
                 // console.log(output, target);
                 copy(`${destination}/output.txt`, target, (err) => {

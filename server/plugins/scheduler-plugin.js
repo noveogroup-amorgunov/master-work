@@ -107,7 +107,7 @@ const selectServer = (task) => {
   logger.push(`[${task.id}] Estimated run time on server: ${expectedTimeServer}s`);
   logger.push(`[${task.id}] Estimated run time on cluster: ${expectedTimeCluster}s`);
 
-  const isCluster = !!P;
+  const isCluster = !!P && (expectedTimeServer / 1000) > 30;
   logger.push(`[${task.id}] Task will be send to ${isCluster ? 'cluster' : 'server'} (automatically)..`);
 
   // @todo - don't hardcode it

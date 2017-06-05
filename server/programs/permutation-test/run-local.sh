@@ -6,4 +6,4 @@ echo $PWD
 echo "start exucation"
 #g++ main.cpp -o main.out
 ./main.origin.out
-cp output.txt output2.txt
+#cp output.txt output2.txt
